@@ -1,0 +1,63 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "check-libs": "npm-check",
+    "check-not-used-libs": "depcheck",
+    "format": "prettier --write \"src/**/*.ts\" validator-env-example.ts",
+    "lint": "eslint \"src/**/*.ts\" validator-env-example.ts --fix",
+    "prebuild": "rimraf dist",
+    "prepare": "husky",
+    "start": "nest start",
+    "start:debug": "nest start --debug --watch",
+    "start:dev": "nest start --watch",
+    "start:prod": "node dist/applications/main",
+    "validate-env-example": "tsc validator-env-example.ts && node validator-env-example.js; EXIT_CODE=$?; rm -rf validator-env-example.js src/applications/env.schema.js; exit $EXIT_CODE",
+    "validate-format": "prettier \"src/**/*.ts\" validator-env-example.ts --check",
+    "validate-lint": "eslint \"src/**/*.ts\" validator-env-example.ts "
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.3.9",
+    "@nestjs/config": "^3.2.2",
+    "@nestjs/core": "^10.3.9",
+    "@nestjs/cqrs": "^10.2.7",
+    "@nestjs/microservices": "^10.3.9",
+    "@nestjs/mongoose": "^10.0.6",
+    "@nestjs/platform-express": "^10.3.9",
+    "@nestjs/schedule": "^4.0.2",
+    "class-transformer": "^0.5.1",
+    "cron": "^3.1.7",
+    "express": "^4.19.2",
+    "joi": "^17.13.1",
+    "mongoose": "^8.4.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.2.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.4.0",
+    "@nestjs/cli": "^10.3.2",
+    "@typescript-eslint/parser": "^7.13.0",
+    "depcheck": "^1.4.7",
+    "eslint": "^9.4.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-typescript-sort-keys": "^3.2.0",
+    "husky": "^9.0.11",
+    "npm-check": "^6.0.1",
+    "prettier": "^3.3.1",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.13.0"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": "^20.12.2",
+    "npm": "^10.5.0",
+    "yarn": "^1.22.19"
+  }
+}

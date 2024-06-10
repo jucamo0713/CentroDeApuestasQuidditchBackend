@@ -1,0 +1,6 @@
+{
+  "ignores": [
+    "typescript"
+  ],
+  "skip-missing": false
+}
