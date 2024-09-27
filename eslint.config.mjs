@@ -1,20 +1,8 @@
-import eslintConfigPrettier from 'eslint-config-prettier';
-import eslintPluginPrettier from 'eslint-plugin-prettier';
+import prettier from 'eslint-config-prettier';
 import eslint from '@eslint/js';
 import tsEslint from 'typescript-eslint';
 import tsSortKeys from 'eslint-plugin-typescript-sort-keys';
 
-const prettier = {
-    ...eslintConfigPrettier,
-    plugins: {
-        eslintPluginPrettier,
-    },
-    rules: {
-        ...eslintConfigPrettier.rules,
-        'eslintPluginPrettier/prettier': 'error',
-        'arrow-body-style': 'off',
-    },
-};
 // noinspection JSUnusedGlobalSymbols
 export default tsEslint.config(
     eslint.configs.recommended,
@@ -23,14 +11,13 @@ export default tsEslint.config(
     {
         rules: {
             'linebreak-style': ['error', 'unix'],
+            'max-depth': ['error', 4],
+            'object-curly-spacing': ['error', 'always'],
+            'prefer-template': ['error'],
             quotes: ['error', 'single', { avoidEscape: true }],
             semi: ['error', 'always'],
-            'object-curly-spacing': ['error', 'always'],
-            'max-depth': ['error', 4],
-            'prefer-template': ['error'],
-            'sort-vars': ['error'],
             'sort-keys': ['error', 'asc'],
-            'prefer-arrow-callback': ['error', { 'allowUnboundThis': false }],
+            'sort-vars': ['error'],
         },
     },
     {
@@ -38,9 +25,13 @@ export default tsEslint.config(
             tsSortKeys,
         },
         rules: {
-            'tsSortKeys/interface': ['error', 'asc', {
-                requiredFirst: true,
-            }],
+            'tsSortKeys/interface': [
+                'error',
+                'asc',
+                {
+                    requiredFirst: true,
+                },
+            ],
             'tsSortKeys/string-enum': ['error'],
         },
     },

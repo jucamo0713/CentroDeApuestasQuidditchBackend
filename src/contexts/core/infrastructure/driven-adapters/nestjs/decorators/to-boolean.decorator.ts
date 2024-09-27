@@ -1,11 +1,7 @@
 import { Transform } from 'class-transformer';
 import { TypeParseUtils } from '../../../../domain/usecase/utils/type-parse.utils';
 
-/**
- * Decorator to transform a value to a boolean during serialization.
- * @returns Decorator function.
- */
-export function ToBoolean(): (target: unknown, key: string) => void {
+export function ToBoolean(): (target: NonNullable<unknown>, key: string) => void {
     const toPlain = Transform(
         ({ value }) => {
             return value;
@@ -14,7 +10,7 @@ export function ToBoolean(): (target: unknown, key: string) => void {
             toPlainOnly: true,
         },
     );
-    const toClass = (target: unknown, key: string) => {
+    const toClass = (target: NonNullable<unknown>, key: string) => {
         return Transform(
             ({ obj }) => {
                 return TypeParseUtils.valueToBoolean(obj[key]);
@@ -24,7 +20,7 @@ export function ToBoolean(): (target: unknown, key: string) => void {
             },
         )(target, key);
     };
-    return function (target: unknown, key: string) {
+    return function (target: NonNullable<unknown>, key: string) {
         toPlain(target, key);
         toClass(target, key);
     };

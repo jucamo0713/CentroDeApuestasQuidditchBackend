@@ -18,10 +18,6 @@ const schemaKeys: Set<string> = new Set(EnvSchema.$_terms.keys.map((term: { key:
 const keysNotInSchema: Set<string> = new Set();
 const allUsedKeys: Set<string> = new Set();
 
-/**
- * Searches the specified directory for TypeScript files and checks for environment variable usage.
- * @param directoryPath The path of the directory to search.
- */
 function searchDirectory(directoryPath: string) {
     const files = readdirSync(directoryPath);
     files.forEach((file) => {

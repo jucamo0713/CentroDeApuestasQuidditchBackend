@@ -6,18 +6,7 @@ import { InFilterElement } from '../../../domain/model/filters/in-filter.type';
 import { StringValueObject } from '../../../../core/domain/model/value-objects/string.value-object';
 import { NumberValueObject } from '../../../../core/domain/model/value-objects/number.value-object';
 
-/**
- * Class with a set of useful methods for mongodb database repositories.
- */
 export abstract class MongodbUtils {
-    /**
-     * Method that builds an aggregation to search for elements with pagination.
-     * @template T
-     * @param page - The page to be consulted.
-     * @param limit - The limit of elements that the page must have.
-     * @param filters - The filters to be applied in the pagination.
-     * @returns The aggregation that allows to obtain paged elements in the mongo database.
-     */
     public static buildPaginationQuery<T = unknown>(
         page: PaginationPage,
         limit: PaginationLimit,
@@ -34,12 +23,6 @@ export abstract class MongodbUtils {
         return aggregateOptions;
     }
 
-    /**
-     * Method that builds an aggregation with steps to add metadata to a paged search.
-     * @param page - The page to be consulted.
-     * @param limit - The limit of elements that the page must have.
-     * @returns Aggregation that aggregates metadata from a paged search.
-     */
     private static resolveMetadata(
         page: PaginationPage,
         limit: PaginationLimit,
@@ -51,12 +34,6 @@ export abstract class MongodbUtils {
         return metadata;
     }
 
-    /**
-     * Method that builds an aggregation with paging steps.
-     * @param page - The page to be consulted.
-     * @param limit - The limit of elements that the page must have.
-     * @returns Constructed aggregation.
-     */
     private static resolvePagination(
         page: PaginationPage,
         limit: PaginationLimit,
@@ -67,12 +44,6 @@ export abstract class MongodbUtils {
         return pagination;
     }
 
-    /**
-     * Resolves filters for MongoDB aggregation pipeline.
-     * @template T - The type of the data for which filters are applied.
-     * @param [filters] - The search filters.
-     * @returns The MongoDB aggregation pipeline stage for matching filters.
-     */
     private static resolveFilters<T>(filters?: SearchFilterType<T>): PipelineStage.Match {
         const query: PipelineStage.Match = { $match: {} };
         if (filters) {
@@ -91,11 +62,6 @@ export abstract class MongodbUtils {
         return query;
     }
 
-    /**
-     * Allows to convert valuables to their raw values.
-     * @param filter The filter param.
-     * @returns The mapped value objects.
-     */
     private static mapValueObjects(filter: unknown): unknown {
         if (filter instanceof StringValueObject) {
             return filter.toString();

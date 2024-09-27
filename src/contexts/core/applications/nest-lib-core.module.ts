@@ -1,15 +1,12 @@
 import { Global, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { NestCqrsCaller } from '../infrastructure/driven-adapters/nestjs/cqrs/nest-cqrs-caller.service';
-import { AppLogger } from '../infrastructure/driven-adapters/nestjs/logger/app.logger';
+import { AppExceptionFilter } from '../infrastructure/driven-adapters/nestjs/filters/app.exception-filter';
 
-/**
- * Nestjs core library module.
- */
 @Global()
 @Module({
-    exports: [NestCqrsCaller, AppLogger],
+    exports: [NestCqrsCaller],
     imports: [CqrsModule],
-    providers: [NestCqrsCaller, AppLogger],
+    providers: [NestCqrsCaller, AppExceptionFilter],
 })
 export class NestLibCoreModule {}
