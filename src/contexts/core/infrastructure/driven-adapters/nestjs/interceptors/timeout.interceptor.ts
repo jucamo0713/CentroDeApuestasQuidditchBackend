@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { catchError, Observable, throwError, timeout, TimeoutError } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import process from 'node:process';
+import * as process from 'node:process';
 
 const TIMEOUT_METADATA_KEY: string = 'timeout_config';
 
@@ -26,10 +26,9 @@ export function CancelTimeoutDecorator(): MethodDecorator {
 
 @Injectable()
 export class TimeoutInterceptor implements NestInterceptor {
-    constructor(
-        private readonly reflector: Reflector,
-        private readonly defaultServicesTimeout: number = Number(process.env.DEFAULT_TIMEOUT_MS),
-    ) {}
+    private readonly defaultServicesTimeout = Number(process.env.DEFAULT_TIMEOUT_MS!);
+
+    constructor(private readonly reflector: Reflector) {}
 
     intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
         const timeMs: number = this.reflector.get<number>(TIMEOUT_METADATA_KEY, context.getHandler());

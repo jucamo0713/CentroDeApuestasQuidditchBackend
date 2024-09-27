@@ -11,7 +11,7 @@ const exampleFile = readFileSync('.env.example').toString();
 const exampleKeys = new Set(
     exampleFile
         .split('\n')
-        .filter((line) => line && !line.startsWith('#'))
+        .filter((line) => line && !line.startsWith('#') && line.includes('='))
         .map((line) => line.split('=')[0]),
 );
 const schemaKeys: Set<string> = new Set(EnvSchema.$_terms.keys.map((term: { key: string }) => term.key));
@@ -30,14 +30,16 @@ function searchDirectory(directoryPath: string) {
             const matches = data.match(new RegExp(/process\.env\.\w+/, 'g'));
             if (matches) {
                 matches.forEach((match) => {
-                    const key = match.split('process.env.').pop().trim();
-                    allUsedKeys.add(key);
-                    if (!listDefaultsKeys.has(key)) {
-                        if (!exampleKeys.has(key)) {
-                            keysNotInExample.add(key);
-                        }
-                        if (!schemaKeys.has(key)) {
-                            keysNotInSchema.add(key);
+                    const key = match.split('process.env.').pop()?.trim();
+                    if (key) {
+                        allUsedKeys.add(key);
+                        if (!listDefaultsKeys.has(key)) {
+                            if (!exampleKeys.has(key)) {
+                                keysNotInExample.add(key);
+                            }
+                            if (!schemaKeys.has(key)) {
+                                keysNotInSchema.add(key);
+                            }
                         }
                     }
                 });
@@ -47,11 +49,13 @@ function searchDirectory(directoryPath: string) {
             const matches = data.match(new RegExp(/\$\{\s*\w+\s*(-\s*\w+\s*)?}/, 'g'));
             if (matches) {
                 matches.forEach((match) => {
-                    const key = match.match(/\w+/).pop().trim();
-                    allUsedKeys.add(key);
-                    if (!listDefaultsKeys.has(key)) {
-                        if (!exampleKeys.has(key)) {
-                            keysNotInExample.add(key);
+                    const key = match.match(/\w+/)?.pop()?.trim();
+                    if (key) {
+                        allUsedKeys.add(key);
+                        if (!listDefaultsKeys.has(key)) {
+                            if (!exampleKeys.has(key)) {
+                                keysNotInExample.add(key);
+                            }
                         }
                     }
                 });

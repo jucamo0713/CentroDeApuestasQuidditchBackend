@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MongoDatabaseConstants } from './providers/mongodb/mongo-database.constants';
 import { AppConfigModule } from '../../../applications/app-config.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { JwtModule } from '@nestjs/jwt';
 
 @Global()
 @Module({
@@ -15,6 +16,7 @@ import { ScheduleModule } from '@nestjs/schedule';
             connectionName: MongoDatabaseConstants.DATABASE_CONNECTION_NAME,
         }),
         ScheduleModule.forRoot(),
+        JwtModule.register({}),
     ],
     providers: [...SharedProviders],
 })

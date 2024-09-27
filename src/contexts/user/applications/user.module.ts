@@ -8,7 +8,8 @@ import { Commands } from '../domain/usecase/commands';
  * Module to configure processes related to users.
  */
 @Module({
+    controllers: [HttpUserEntryPoint],
     imports: [],
-    providers: [HttpUserEntryPoint, ...UserProviders, ...Queries, ...Commands],
+    providers: [...UserProviders, ...Queries, ...Commands],
 })
 export class UserModule {}

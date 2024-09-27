@@ -69,6 +69,7 @@ export class AuthUseCase {
             process.env.AUTH_REFRESH_TOKEN_SECRET!,
         );
         if (!refreshTokenData) throw new RefreshTokenNotValidException(AuthUseCase.name);
+        console.log(refreshTokenData);
         const user: User = await this.cqrsCaller.query<GetUserByIdQuery, User>(
             new GetUserByIdQuery(new UserId(refreshTokenData.user)),
         );

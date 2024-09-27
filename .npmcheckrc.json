@@ -1,7 +1,8 @@
 {
   "depcheck": {
     "ignoreMatches": [
-      "typescript"
+      "typescript",
+      "rimraf"
     ]
   }
 }

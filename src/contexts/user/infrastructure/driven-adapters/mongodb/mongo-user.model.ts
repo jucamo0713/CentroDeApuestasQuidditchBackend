@@ -4,7 +4,6 @@ import { UserDto } from '../../user.dto';
 export type UserDocument = HydratedDocument<UserDto>;
 const definition: Required<SchemaDefinition<UserDto>> = {
     email: {
-        index: 'hashed',
         required: true,
         type: String,
         unique: true,
@@ -18,20 +17,24 @@ const definition: Required<SchemaDefinition<UserDto>> = {
         type: String,
     },
     userId: {
-        index: 'hashed',
         required: true,
         type: String,
         unique: true,
     },
     username: {
-        index: 'hashed',
         required: true,
         type: String,
         unique: true,
     },
 };
 
-/**
- * Mongoose schema for the users.
- */
 export const UserSchema: Schema<UserDto> = new Schema(definition, { timestamps: true });
+UserSchema.index({
+    email: 'hashed',
+});
+UserSchema.index({
+    username: 'hashed',
+});
+UserSchema.index({
+    userId: 'hashed',
+});

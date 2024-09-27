@@ -41,6 +41,7 @@ export class AppExceptionFilter implements ExceptionFilter {
             }
             try {
                 return JSON.stringify(exception);
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (e) {
                 return data;
             }

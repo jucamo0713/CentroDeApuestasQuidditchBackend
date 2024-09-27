@@ -96,7 +96,7 @@ export class UserUseCase {
         return isAvailable;
     }
 
-    async signup(username: string, email: Email, password: Password, fullName: string): Promise<AuthTokens> {
+    async signup(email: Email, username: string, fullName: string, password: Password): Promise<AuthTokens> {
         this.logger.log(`[${this.signup.name}] INIT :: email: ${email.toString()}`);
 
         if (!(await this.validateUsernameAvailability(username))) {

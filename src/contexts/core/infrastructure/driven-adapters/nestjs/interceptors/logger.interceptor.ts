@@ -1,6 +1,5 @@
 import {
     applyDecorators,
-    ArgumentsHost,
     CallHandler,
     ExecutionContext,
     Injectable,
@@ -18,11 +17,15 @@ const DONT_PRINT_RESPONSE_METADATA_KEY: string = 'DONT_PRINT_RESPONSE';
 
 const DONT_PRINT_LOGS_METADATA_KEY: string = 'DONT_PRINT_LOGS';
 
-export function LoggerDecorator(
-    printRequest: boolean = true,
-    printResponse: boolean = true,
-    printLogs: boolean = true,
-): MethodDecorator {
+export function LoggerDecorator({
+    printRequest = true,
+    printResponse = true,
+    printLogs = true,
+}: {
+    printLogs?: boolean;
+    printRequest?: boolean;
+    printResponse?: boolean;
+}): MethodDecorator {
     return applyDecorators(
         SetMetadata(DONT_PRINT_REQUEST_METADATA_KEY, !printRequest),
         SetMetadata(DONT_PRINT_RESPONSE_METADATA_KEY, !printResponse),
@@ -32,15 +35,12 @@ export function LoggerDecorator(
 
 @Injectable()
 export class LoggerInterceptor implements NestInterceptor {
-    constructor(
-        private readonly reflector: Reflector,
-        private readonly requestUtil: (context: ArgumentsHost) => Promise<unknown> = resolveRequestsUtil,
-    ) {}
+    constructor(private readonly reflector: Reflector) {}
 
     intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
         if (!this.reflector.get(DONT_PRINT_LOGS_METADATA_KEY, context.getHandler())) {
             const logger: Logger = new Logger(context.getClass().name);
-            const request = this.requestUtil(context);
+            const request = resolveRequestsUtil(context);
             const now = Date.now();
             const printData = !this.reflector.get(DONT_PRINT_REQUEST_METADATA_KEY, context.getHandler());
             if (isObservable(request)) {
@@ -60,7 +60,7 @@ export class LoggerInterceptor implements NestInterceptor {
             } else {
                 logger.log(
                     `[${context.getHandler().name}] - INIT - ${
-                        printData ? `data: ${JSON.stringify(this.requestUtil(context))}` : ''
+                        printData ? `data: ${JSON.stringify(resolveRequestsUtil(context))}` : ''
                     }`,
                 );
             }

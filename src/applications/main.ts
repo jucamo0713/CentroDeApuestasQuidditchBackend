@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import process from 'node:process';
+import * as process from 'node:process';
 import { LoggerInterceptor } from '../contexts/core/infrastructure/driven-adapters/nestjs/interceptors/logger.interceptor';
 import { TimeoutInterceptor } from '../contexts/core/infrastructure/driven-adapters/nestjs/interceptors/timeout.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';

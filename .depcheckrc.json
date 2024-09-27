@@ -1,6 +1,7 @@
 {
   "ignores": [
-    "typescript"
+    "typescript",
+    "rimraf"
   ],
   "skip-missing": false
 }

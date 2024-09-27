@@ -1,4 +1,4 @@
-export class MetadataType {
+export class PaginationMetadata {
     page: number = 0;
 
     total: number = 0;
@@ -9,5 +9,5 @@ export class MetadataType {
 export class PaginationType<T> {
     data: Array<T> = [];
 
-    metadata: MetadataType = new MetadataType();
+    metadata: PaginationMetadata = new PaginationMetadata();
 }
