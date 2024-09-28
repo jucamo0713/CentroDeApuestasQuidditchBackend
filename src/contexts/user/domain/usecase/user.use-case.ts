@@ -12,6 +12,7 @@ import { EmailAlreadyExistException } from '../model/exceptions/email-already-ex
 import { PasswordNotValidException } from '../model/exceptions/password-not-valid.exception';
 import { UserErrorMessagesConstants } from '../model/exceptions/user-error-messages.constants';
 import { HttpStatus, Logger } from '@nestjs/common';
+import { Balance } from '../model/balance';
 
 export class UserUseCase {
     private readonly logger: Logger = new Logger(UserUseCase.name);
@@ -107,7 +108,14 @@ export class UserUseCase {
         }
 
         const userId: UserId = new UserId(UserId.generate());
-        const user: User = new User(userId, email, fullName, username, Password.generate(password.toString(), userId));
+        const user: User = new User(
+            userId,
+            email,
+            fullName,
+            username,
+            new Balance(0, 0, 0),
+            Password.generate(password.toString(), userId),
+        );
         this.repository.create(user);
         const tokens: AuthTokens = await this.cqrsCaller.dispatch<GenerateAuthTokensCommand, AuthTokens>(
             new GenerateAuthTokensCommand(user.userId),

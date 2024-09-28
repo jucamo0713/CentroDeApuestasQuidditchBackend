@@ -16,6 +16,7 @@ import { MeResponse } from './responses/me.response';
 import { GetUserByIdQuery } from '../../../domain/usecase/queries/get/by-id/get-user-by-id.query';
 import { User } from '../../../domain/model/user';
 import { UserId } from '../../../domain/model/user.id';
+import { BalanceResponse } from './responses/balance.response';
 
 @Controller('/users')
 @ApiTags('Users')
@@ -48,6 +49,21 @@ export class HttpUserEntryPoint {
         data.fullName = user.fullName;
         data.username = user.username;
         data.email = user.email.toString();
+        return data;
+    }
+
+    @Get('balance')
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @ApiAcceptedResponse({ type: BalanceResponse })
+    async balance(@GetAuthData() authData: AccessTokenData): Promise<BalanceResponse> {
+        const data = new BalanceResponse();
+        const user = await this.cqrsCaller.query<GetUserByIdQuery, User>(
+            new GetUserByIdQuery(new UserId(authData.user)),
+        );
+        data.galleons = user.balance.galleons;
+        data.sickles = user.balance.sickles;
+        data.knuts = user.balance.knuts;
         return data;
     }
 }

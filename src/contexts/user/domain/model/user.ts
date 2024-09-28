@@ -1,6 +1,7 @@
 import { Email } from './email';
 import { UserId } from './user.id';
 import { Password } from './password';
+import { Balance } from './balance';
 
 export class User {
     constructor(
@@ -8,6 +9,7 @@ export class User {
         private readonly _email: Email,
         private readonly _fullName: string,
         private readonly _username: string,
+        private readonly _balance: Balance,
         private _password: Password,
     ) {}
 
@@ -33,5 +35,9 @@ export class User {
 
     set password(value: Password) {
         this._password = value;
+    }
+
+    get balance(): Balance {
+        return this._balance;
     }
 }
