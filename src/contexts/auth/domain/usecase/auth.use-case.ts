@@ -79,9 +79,9 @@ export class AuthUseCase {
     }
 
     async validateToken(token: string): Promise<AccessTokenData | undefined> {
-        this.logger.log(`[${this.refreshAuthTokens.name}] INIT ::`);
+        this.logger.log(`[${this.validateToken.name}] INIT ::`);
         const data = this.tokenRepository.verify<AccessTokenData>(token, process.env.AUTH_TOKEN_SECRET!);
-        this.logger.log(`[${this.refreshAuthTokens.name}] FINISH ::`);
+        this.logger.log(`[${this.validateToken.name}] FINISH ::`);
         return data;
     }
 }

@@ -9,7 +9,7 @@ export class User {
         private readonly _email: Email,
         private readonly _fullName: string,
         private readonly _username: string,
-        private readonly _balance: Balance,
+        private _balance: Balance,
         private _password: Password,
     ) {}
 
@@ -39,5 +39,9 @@ export class User {
 
     get balance(): Balance {
         return this._balance;
+    }
+
+    set balance(value: Balance) {
+        this._balance = value;
     }
 }

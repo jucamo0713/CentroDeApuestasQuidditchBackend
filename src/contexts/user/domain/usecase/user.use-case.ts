@@ -125,4 +125,21 @@ export class UserUseCase {
         this.logger.log(`[${this.signup.name}] FINISH ::`);
         return tokens;
     }
+
+    async rechargeById(userId: UserId, balanceToRecharge: Balance): Promise<Balance> {
+        this.logger.log(`[${this.rechargeById.name}] INIT :: userId: ${userId.toString()}`);
+        const user = await this.getById(userId);
+        const currentBalance = user.balance;
+        let knuts = currentBalance.knuts + balanceToRecharge.knuts;
+        const aux1 = Math.floor(knuts / 29);
+        knuts = knuts % 29;
+        let sickles = currentBalance.sickles + balanceToRecharge.sickles + aux1;
+        const aux2 = Math.floor(sickles / 17);
+        sickles = sickles % 17;
+        const galleons = currentBalance.galleons + balanceToRecharge.galleons + aux2;
+        user.balance = new Balance(galleons, sickles, knuts);
+        const updated = await this.repository.update(user);
+        this.logger.log(`[${this.rechargeById.name}] FINISH ::`);
+        return updated!.balance;
+    }
 }

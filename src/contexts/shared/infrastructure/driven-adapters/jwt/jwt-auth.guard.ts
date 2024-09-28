@@ -15,11 +15,14 @@ export class JwtAuthGuard implements CanActivate {
                 const request: Request = context.switchToHttp().getRequest<Request>();
                 const token: string | null = ExtractJwt.fromAuthHeaderAsBearerToken()(request);
                 if (token) {
-                    request.user = await this.cqrsCaller.query<ValidateTokenQuery, AccessTokenData>(
+                    request.user = await this.cqrsCaller.query<ValidateTokenQuery, AccessTokenData | undefined>(
                         new ValidateTokenQuery(token),
                         false,
                         false,
                     );
+                    if (!request.user) {
+                        return false;
+                    }
                 } else {
                     return false;
                 }

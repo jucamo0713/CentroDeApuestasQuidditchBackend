@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiAcceptedResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { LoggerDecorator } from '../../../../core/infrastructure/driven-adapters/nestjs/interceptors/logger.interceptor';
 import { NestCqrsCaller } from '../../../../core/infrastructure/driven-adapters/nestjs/cqrs/nest-cqrs-caller.service';
@@ -17,6 +17,9 @@ import { GetUserByIdQuery } from '../../../domain/usecase/queries/get/by-id/get-
 import { User } from '../../../domain/model/user';
 import { UserId } from '../../../domain/model/user.id';
 import { BalanceResponse } from './responses/balance.response';
+import { MoneyGenericRequest } from '../../../../shared/infrastructure/entry-points/http/requests/money-generic.request';
+import { Balance } from '../../../domain/model/balance';
+import { RechargeBalanceByIdCommand } from '../../../domain/usecase/commands/recharge/recharge-balance-by-id.command';
 
 @Controller('/users')
 @ApiTags('Users')
@@ -64,6 +67,27 @@ export class HttpUserEntryPoint {
         data.galleons = user.balance.galleons;
         data.sickles = user.balance.sickles;
         data.knuts = user.balance.knuts;
+        return data;
+    }
+
+    @Patch('recharge')
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @ApiAcceptedResponse({ type: BalanceResponse })
+    async recharge(
+        @GetAuthData() authData: AccessTokenData,
+        @Body() body: MoneyGenericRequest,
+    ): Promise<BalanceResponse> {
+        const data = new BalanceResponse();
+        const balance = await this.cqrsCaller.dispatch<RechargeBalanceByIdCommand, Balance>(
+            new RechargeBalanceByIdCommand(
+                new UserId(authData.user),
+                new Balance(body.galleons, body.sickles, body.knuts),
+            ),
+        );
+        data.galleons = balance.galleons;
+        data.sickles = balance.sickles;
+        data.knuts = balance.knuts;
         return data;
     }
 }
